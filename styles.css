@@ -3,7 +3,7 @@
   height:300px;
 }
 .form_main {
-  width: 220px;
+  width: 400px;
   display: flex;
   flex-direction: column;
   align-items: center;
