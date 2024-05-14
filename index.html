@@ -17,11 +17,32 @@
         <a id="download-button" href="#" download>Click here to download</a>
     </div>
 
+    <div id="server-status">Server Status: Checking...</div>
+
     <script>
+        // Función para verificar el estado del servidor
+        function checkServerStatus() {
+            fetch('http://192.168.0.111:7327/status') // Cambia la IP y el puerto si es necesario
+            .then(response => {
+                if (response.ok) {
+                    document.getElementById('server-status').textContent = 'Server Status: Online';
+                } else {
+                    document.getElementById('server-status').textContent = 'Server Status: Offline';
+                }
+            })
+            .catch(error => {
+                document.getElementById('server-status').textContent = 'Server Status: Offline';
+                console.error('Error:', error);
+            });
+        }
+
+        // Verifica el estado del servidor al cargar la página
+        window.addEventListener('load', checkServerStatus);
+
         document.getElementById('download-form').addEventListener('submit', function(event) {
             event.preventDefault();
             var videoLink = document.getElementById('video-link').value;
-            fetch('/download', {
+            fetch('http://192.168.0.111:7327/download', { // Cambia la IP y el puerto si es necesario
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
