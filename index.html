@@ -35,9 +35,80 @@
 	<button id="button">Submit</button>
     <a class="forgotLink" href="#">Forgot your password?</a>
   </form>
-  
-  
-  
+	<pre>
+		private class DownloadTask extends AsyncTask<String, Void, String> {
+    @Override
+    protected String doInBackground(String... urls) {
+        // Verificar la conexión con el servidor Flask antes de continuar
+        if (!isServerActive()) {
+            return "El servidor no está activo. Por favor, intenta de nuevo más tarde.";
+        }
+
+        String result = "";
+        try {
+            URL url = new URL("http://192.168.0.111:7327/download");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setDoOutput(true);
+
+            // Construir los datos de la solicitud POST
+            String postData = "video_link=" + urls[0];
+            OutputStream outputStream = connection.getOutputStream();
+            outputStream.write(postData.getBytes());
+            outputStream.flush();
+            outputStream.close();
+
+            // Leer la respuesta del servidor
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            StringBuilder stringBuilder = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+            reader.close();
+
+            result = stringBuilder.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = "Error al conectar al servidor";
+        }
+        return result;
+    }
+
+    @Override
+    protected void onPostExecute(String result) {
+        Toast.makeText(MainActivity.this, result, Toast.LENGTH_LONG).show();
+    }
+
+    private boolean isServerActive() {
+        try {
+            URL url = new URL("http://192.168.0.111:7327/");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            int responseCode = connection.getResponseCode();
+            return responseCode == HttpURLConnection.HTTP_OK;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private boolean connectToServer() {
+        try {
+            URL url = new URL("http://192.168.0.111:7327/");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            int responseCode = connection.getResponseCode();
+            return responseCode == HttpURLConnection.HTTP_OK;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+}
+	</pre>
   
 </body>
 
