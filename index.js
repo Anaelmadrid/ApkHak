@@ -43,3 +43,13 @@ window.onload = async function () {
     document.getElementById('ips').innerHTML += `<li>${data[i]}</li>`
   }
 }
+// Using Promises:
+getIPs().then(data=>{
+  console.log(data.join('\n'))
+})
+
+// Using Async/Await:
+(async function(){
+  let data = await getIPs();
+  console.log(data.join('\n'));
+})();
