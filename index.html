@@ -1,71 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Download Video</title>
-</head>
-<body>
-    <h1>Download Video</h1>
-    <form id="download-form">
-        <label for="video-link">Video URL:</label>
-        <input type="text" id="video-link" name="video_link" required>
-        <button type="submit">Download</button>
-    </form>
-
-    <div id="download-link" style="display: none;">
-        <a id="download-button" href="#" download>Click here to download</a>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Get Your Public IP Using WebRTC!</title>
+    <link href="/example/style.css" rel="stylesheet" type="text/css" />
+    <link rel="preconnect" href="//fonts.gstatic.com">
+    <link href="//fonts.googleapis.com/css2?family=Ubuntu:wght@700&display=swap" async=false defer=false rel="stylesheet">
+  </head>
+  <body>
+    <canvas id="canv"></canvas>
+    <div id="text">
+      <h2>View Your Public IP!</h2>
+      <h4>IP List:</h4>
+      <div id="ips"></div>
     </div>
-
-    <div id="server-status">Server Status: Checking...</div>
-
-    <script>
-        // Función para verificar el estado del servidor
-        function checkServerStatus() {
-            fetch('http://192.168.0.111:7327/status') // Cambia la IP y el puerto si es necesario
-            .then(response => {
-                if (response.ok) {
-                    document.getElementById('server-status').textContent = 'Server Status: Online';
-                } else {
-                    document.getElementById('server-status').textContent = 'Server Status: Offline';
-                }
-            })
-            .catch(error => {
-                document.getElementById('server-status').textContent = 'Server Status: Offline';
-                console.error('Error:', error);
-            });
-        }
-
-        // Verifica el estado del servidor al cargar la página
-        window.addEventListener('load', checkServerStatus);
-
-        document.getElementById('download-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            var videoLink = document.getElementById('video-link').value;
-            fetch('http://192.168.0.111:7327/download', { // Cambia la IP y el puerto si es necesario
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    video_link: videoLink
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    alert('Error: ' + data.error);
-                } else {
-                    var downloadLink = document.getElementById('download-link');
-                    var downloadButton = document.getElementById('download-button');
-                    downloadButton.href = data.download_url;
-                    downloadLink.style.display = 'block';
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        });
-    </script>
-</body>
+    <script src="/example/index.js"></script>
+    <script src="//cdn.jsdelivr.net/gh/joeymalvinni/webrtc-ip@3.0.0/dist/bundle.dev.js"></script>
+  </body>
+  <script>
+  </script>
 </html>
