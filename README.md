@@ -1,2 +1,1 @@
-# ApkHak
-Repositorio de apks Haks
+# Apps hakeadas con Luck patches 
